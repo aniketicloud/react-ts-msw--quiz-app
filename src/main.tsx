@@ -4,15 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 import { worker } from "./mocks/browser";
-worker.start({
-  onUnhandledRequest: ({ url }, { warning }) => {
-    if (url.pathname === "/vite.svg" || url) {
-      return;
-    } else {
-      warning();
-    }
-  },
-});
+worker.start({ onUnhandledRequest: "bypass" });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
