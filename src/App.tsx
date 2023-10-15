@@ -5,12 +5,12 @@ import { QuizContext } from "./contexts/QuizContext";
 
 function App() {
   return (
-    <>
+    <div className="app">
       <Header />
       <Main>
         <QuizContext />
       </Main>
-    </>
+    </div>
   );
 }
 

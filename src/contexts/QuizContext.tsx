@@ -3,6 +3,7 @@ import { questionsApi } from "../constants";
 import { Loader } from "../components/Loader";
 import { Error } from "../components/Error";
 import { StartScreen } from "../components/StartScreen";
+import { Question } from "../components/Question";
 
 interface Question {
   correctOption: number;
@@ -12,9 +13,10 @@ interface Question {
   question: string;
 }
 
-enum ActionType {
+export enum ActionType {
   DATA_RECEIVED,
   DATA_FAILED,
+  START,
 }
 
 interface State {
@@ -26,11 +28,14 @@ enum QuestionsStatus {
   LOADING,
   READY,
   ERROR,
+  ACTIVE,
+  FINISHED,
 }
 
 type Action =
   | { type: ActionType.DATA_RECEIVED; payload: Question[] }
-  | { type: ActionType.DATA_FAILED };
+  | { type: ActionType.DATA_FAILED }
+  | { type: ActionType.START };
 
 const initialState: State = {
   questions: [],
@@ -44,8 +49,10 @@ const reducer = (state: State, action: Action) => {
       return { questions: action.payload, status: QuestionsStatus.READY };
     case ActionType.DATA_FAILED:
       return { ...state, status: QuestionsStatus.ERROR };
-    // default:
-    //   throw new Error("Action unknown");
+    case ActionType.START:
+      return { ...state, status: QuestionsStatus.ACTIVE };
+    default:
+      return { ...state };
   }
 };
 
@@ -71,8 +78,9 @@ export const QuizContext = () => {
       {status === QuestionsStatus.LOADING && <Loader />}
       {status === QuestionsStatus.ERROR && <Error />}
       {status === QuestionsStatus.READY && (
-        <StartScreen numQuestions={questions.length} />
+        <StartScreen numQuestions={questions.length} dispatch={dispatch} />
       )}
+      {status === QuestionsStatus.ACTIVE && <Question />}
     </>
   );
 };
