@@ -1,5 +1,5 @@
 import { FC, Dispatch } from "react";
-import { ActionType } from "../contexts/QuizContext";
+import { ActionType } from "../contexts/ActionType";
 
 interface StartScreenProps {
   numQuestions: number;

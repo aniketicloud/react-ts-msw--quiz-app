@@ -4,6 +4,7 @@ import { Loader } from "../components/Loader";
 import { Error } from "../components/Error";
 import { StartScreen } from "../components/StartScreen";
 import { Question } from "../components/Question";
+import { ActionType } from "./ActionType";
 
 interface Question {
   correctOption: number;
@@ -13,16 +14,11 @@ interface Question {
   question: string;
 }
 
-export enum ActionType {
-  DATA_RECEIVED,
-  DATA_FAILED,
-  START,
-}
-
-interface State {
+type State = {
   questions: [] | Question[];
   status: QuestionsStatus;
-}
+  answer?: number;
+};
 
 enum QuestionsStatus {
   LOADING,
@@ -35,11 +31,13 @@ enum QuestionsStatus {
 type Action =
   | { type: ActionType.DATA_RECEIVED; payload: Question[] }
   | { type: ActionType.DATA_FAILED }
-  | { type: ActionType.START };
+  | { type: ActionType.START }
+  | { type: ActionType.NEW_ANSWER; payload: number };
 
 const initialState: State = {
   questions: [],
   status: QuestionsStatus.LOADING,
+  answer: 0,
 };
 
 const reducer = (state: State, action: Action) => {
@@ -51,6 +49,8 @@ const reducer = (state: State, action: Action) => {
       return { ...state, status: QuestionsStatus.ERROR };
     case ActionType.START:
       return { ...state, status: QuestionsStatus.ACTIVE };
+    case ActionType.NEW_ANSWER:
+      return { ...state, answer: action.payload };
     default:
       return { ...state };
   }
