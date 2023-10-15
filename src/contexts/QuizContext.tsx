@@ -1,5 +1,8 @@
 import { useEffect, useReducer } from "react";
 import { questionsApi } from "../constants";
+import { Loader } from "../components/Loader";
+import { Error } from "../components/Error";
+import { StartScreen } from "../components/StartScreen";
 
 interface Question {
   correctOption: number;
@@ -47,7 +50,7 @@ const reducer = (state: State, action: Action) => {
 };
 
 export const QuizContext = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -65,19 +68,11 @@ export const QuizContext = () => {
 
   return (
     <>
-      <h1>Hi</h1>
-      {state.questions.map(({ id, question, options }) => {
-        return (
-          <div key={id}>
-            <h2>{question}</h2>
-            <ul>
-              {options.map((answer, index) => (
-                <li key={index}>{answer}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
+      {status === QuestionsStatus.LOADING && <Loader />}
+      {status === QuestionsStatus.ERROR && <Error />}
+      {status === QuestionsStatus.READY && (
+        <StartScreen numQuestions={questions.length} />
+      )}
     </>
   );
 };

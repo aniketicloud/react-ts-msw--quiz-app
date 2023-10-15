@@ -8,8 +8,6 @@ function App() {
     <>
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Questions</p>
         <QuizContext />
       </Main>
     </>
