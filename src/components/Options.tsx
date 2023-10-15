@@ -7,8 +7,12 @@ interface OptionsProps {
 
 export const Options: FC<OptionsProps> = ({ question }) => {
   return (
-    <>
-      <h3>Question: {question.question}</h3>
-    </>
+    <div className="options">
+      {question.options.map((option) => (
+        <button className="btn btn-option" key={option}>
+          {option}
+        </button>
+      ))}
+    </div>
   );
 };

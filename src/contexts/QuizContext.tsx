@@ -10,7 +10,8 @@ import type { QuestionType } from "../types";
 type State = {
   questions: [] | QuestionType[];
   status: QuestionsStatus;
-  answer?: number;
+  answer: number;
+  index: number;
 };
 
 enum QuestionsStatus {
@@ -30,7 +31,8 @@ type Action =
 const initialState: State = {
   questions: [],
   status: QuestionsStatus.LOADING,
-  answer: 0,
+  answer: 0, // options are 1,2,3,4; so we can use zero for not selected answer
+  index: 0,
 };
 
 const reducer = (state: State, action: Action) => {
@@ -54,7 +56,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 export const QuizContext = () => {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -77,7 +82,9 @@ export const QuizContext = () => {
       {status === QuestionsStatus.READY && (
         <StartScreen numQuestions={questions.length} dispatch={dispatch} />
       )}
-      {status === QuestionsStatus.ACTIVE && <Question />}
+      {status === QuestionsStatus.ACTIVE && (
+        <Question question={questions[index]} />
+      )}
     </>
   );
 };
