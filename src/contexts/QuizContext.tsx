@@ -37,7 +37,11 @@ const reducer = (state: State, action: Action) => {
   const { type } = action;
   switch (type) {
     case ActionType.DATA_RECEIVED:
-      return { questions: action.payload, status: QuestionsStatus.READY };
+      return {
+        ...state,
+        questions: action.payload,
+        status: QuestionsStatus.READY,
+      };
     case ActionType.DATA_FAILED:
       return { ...state, status: QuestionsStatus.ERROR };
     case ActionType.START:
