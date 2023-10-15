@@ -1,5 +1,5 @@
 import { FC, Dispatch } from "react";
-import { ActionType } from "../contexts/ActionType";
+import { ActionType } from "../types";
 
 interface StartScreenProps {
   numQuestions: number;

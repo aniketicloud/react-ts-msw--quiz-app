@@ -4,18 +4,11 @@ import { Loader } from "../components/Loader";
 import { Error } from "../components/Error";
 import { StartScreen } from "../components/StartScreen";
 import { Question } from "../components/Question";
-import { ActionType } from "./ActionType";
-
-interface Question {
-  correctOption: number;
-  id: number;
-  options: string[];
-  points: number;
-  question: string;
-}
+import { ActionType } from "../types";
+import type { QuestionType } from "../types";
 
 type State = {
-  questions: [] | Question[];
+  questions: [] | QuestionType[];
   status: QuestionsStatus;
   answer?: number;
 };
@@ -29,7 +22,7 @@ enum QuestionsStatus {
 }
 
 type Action =
-  | { type: ActionType.DATA_RECEIVED; payload: Question[] }
+  | { type: ActionType.DATA_RECEIVED; payload: QuestionType[] }
   | { type: ActionType.DATA_FAILED }
   | { type: ActionType.START }
   | { type: ActionType.NEW_ANSWER; payload: number };
