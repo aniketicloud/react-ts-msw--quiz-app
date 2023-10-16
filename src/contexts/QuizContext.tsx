@@ -10,7 +10,7 @@ import type { QuestionType } from "../types";
 type State = {
   questions: [] | QuestionType[];
   status: QuestionsStatus;
-  answer: number;
+  answer: null | number;
   index: number;
 };
 
@@ -31,7 +31,7 @@ type Action =
 const initialState: State = {
   questions: [],
   status: QuestionsStatus.LOADING,
-  answer: 0, // options are 1,2,3,4; so we can use zero for not selected answer
+  answer: null, // options are 1,2,3,4; so we can use zero for not selected answer
   index: 0,
 };
 
@@ -56,7 +56,7 @@ const reducer = (state: State, action: Action) => {
 };
 
 export const QuizContext = () => {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -83,7 +83,11 @@ export const QuizContext = () => {
         <StartScreen numQuestions={questions.length} dispatch={dispatch} />
       )}
       {status === QuestionsStatus.ACTIVE && (
-        <Question question={questions[index]} />
+        <Question
+          question={questions[index]}
+          dispatch={dispatch}
+          answer={answer}
+        />
       )}
     </>
   );
