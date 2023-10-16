@@ -31,7 +31,7 @@ type Action =
 const initialState: State = {
   questions: [],
   status: QuestionsStatus.LOADING,
-  answer: null, // options are 1,2,3,4; so we can use zero for not selected answer
+  answer: null,
   index: 0,
 };
 
