@@ -12,6 +12,7 @@ type State = {
   status: QuestionsStatus;
   answer: null | number;
   index: number;
+  points: number;
 };
 
 enum QuestionsStatus {
@@ -26,17 +27,23 @@ type Action =
   | { type: ActionType.DATA_RECEIVED; payload: QuestionType[] }
   | { type: ActionType.DATA_FAILED }
   | { type: ActionType.START }
-  | { type: ActionType.NEW_ANSWER; payload: number };
+  | {
+      type: ActionType.NEW_ANSWER;
+      payload: number;
+      // points: number;
+    };
 
 const initialState: State = {
   questions: [],
   status: QuestionsStatus.LOADING,
   answer: null,
   index: 0,
+  points: 0,
 };
 
 const reducer = (state: State, action: Action) => {
   const { type } = action;
+  const { index, questions, points } = state;
   switch (type) {
     case ActionType.DATA_RECEIVED: {
       return {
@@ -52,7 +59,15 @@ const reducer = (state: State, action: Action) => {
       return { ...state, status: QuestionsStatus.ACTIVE };
     }
     case ActionType.NEW_ANSWER: {
-      return { ...state, answer: action.payload };
+      const currentQuestion = questions.at(index);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          currentQuestion?.correctOption === action.payload
+            ? points + currentQuestion.points
+            : points,
+      };
     }
     default: {
       return { ...state };
