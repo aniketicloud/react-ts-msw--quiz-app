@@ -38,20 +38,25 @@ const initialState: State = {
 const reducer = (state: State, action: Action) => {
   const { type } = action;
   switch (type) {
-    case ActionType.DATA_RECEIVED:
+    case ActionType.DATA_RECEIVED: {
       return {
         ...state,
         questions: action.payload,
         status: QuestionsStatus.READY,
       };
-    case ActionType.DATA_FAILED:
+    }
+    case ActionType.DATA_FAILED: {
       return { ...state, status: QuestionsStatus.ERROR };
-    case ActionType.START:
+    }
+    case ActionType.START: {
       return { ...state, status: QuestionsStatus.ACTIVE };
-    case ActionType.NEW_ANSWER:
+    }
+    case ActionType.NEW_ANSWER: {
       return { ...state, answer: action.payload };
-    default:
+    }
+    default: {
       return { ...state };
+    }
   }
 };
 
