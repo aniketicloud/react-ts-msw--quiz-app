@@ -6,6 +6,7 @@ import { StartScreen } from "../components/StartScreen";
 import { Question } from "../components/Question";
 import { ActionType } from "../types";
 import type { QuestionType } from "../types";
+import { NextButton } from "../components/NextButton";
 
 type State = {
   questions: [] | QuestionType[];
@@ -30,7 +31,9 @@ type Action =
   | {
       type: ActionType.NEW_ANSWER;
       payload: number;
-      // points: number;
+    }
+  | {
+      type: ActionType.NEXT_QUESTION;
     };
 
 const initialState: State = {
@@ -69,6 +72,9 @@ const reducer = (state: State, action: Action) => {
             : points,
       };
     }
+    case ActionType.NEXT_QUESTION: {
+      return { ...state, index: index + 1, answer: null };
+    }
     default: {
       return { ...state };
     }
@@ -103,11 +109,14 @@ export const QuizContext = () => {
         <StartScreen numQuestions={questions.length} dispatch={dispatch} />
       )}
       {status === QuestionsStatus.ACTIVE && (
-        <Question
-          question={questions[index]}
-          dispatch={dispatch}
-          answer={answer}
-        />
+        <>
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+          {answer !== null && <NextButton dispatch={dispatch} />}
+        </>
       )}
     </>
   );
