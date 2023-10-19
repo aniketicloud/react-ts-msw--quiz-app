@@ -7,6 +7,7 @@ import { Question } from "../components/Question";
 import { ActionType } from "../types";
 import type { QuestionType } from "../types";
 import { NextButton } from "../components/NextButton";
+import { Progress } from "../components/Progress";
 
 type State = {
   questions: [] | QuestionType[];
@@ -14,6 +15,7 @@ type State = {
   answer: null | number;
   index: number;
   points: number;
+  maxPoints: number;
 };
 
 enum QuestionsStatus {
@@ -42,6 +44,7 @@ const initialState: State = {
   answer: null,
   index: 0,
   points: 0,
+  maxPoints: 0,
 };
 
 const reducer = (state: State, action: Action) => {
@@ -49,10 +52,14 @@ const reducer = (state: State, action: Action) => {
   const { index, questions, points } = state;
   switch (type) {
     case ActionType.DATA_RECEIVED: {
+      const maxPoints = questions.reduce((previousValue, currentValue) => {
+        return previousValue + currentValue.points;
+      }, 0);
       return {
         ...state,
         questions: action.payload,
         status: QuestionsStatus.READY,
+        maxPoints,
       };
     }
     case ActionType.DATA_FAILED: {
@@ -82,10 +89,8 @@ const reducer = (state: State, action: Action) => {
 };
 
 export const QuizContext = () => {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, maxPoints }, dispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -101,15 +106,24 @@ export const QuizContext = () => {
     fetchUsers();
   }, []);
 
+  const numQuestions = questions.length;
+
   return (
     <>
       {status === QuestionsStatus.LOADING && <Loader />}
       {status === QuestionsStatus.ERROR && <Error />}
       {status === QuestionsStatus.READY && (
-        <StartScreen numQuestions={questions.length} dispatch={dispatch} />
+        <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
       )}
       {status === QuestionsStatus.ACTIVE && (
         <>
+          <Progress
+            index={index}
+            numQuestion={numQuestions}
+            points={points}
+            maxPoints={maxPoints}
+            answer={answer}
+          />
           <Question
             question={questions[index]}
             dispatch={dispatch}
