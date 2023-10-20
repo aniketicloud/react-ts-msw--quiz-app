@@ -8,6 +8,7 @@ import { ActionType } from "../types";
 import type { QuestionType } from "../types";
 import { NextButton } from "../components/NextButton";
 import { Progress } from "../components/Progress";
+import { FinishScreen } from "../components/FinishScreen";
 
 type State = {
   questions: [] | QuestionType[];
@@ -129,8 +130,16 @@ export const QuizContext = () => {
             dispatch={dispatch}
             answer={answer}
           />
-          {answer !== null && <NextButton dispatch={dispatch} />}
+          {answer !== null && index < numQuestions - 1 && (
+            <NextButton dispatch={dispatch} label={"Next"} />
+          )}
+          {index === numQuestions - 1 && (
+            <NextButton dispatch={dispatch} label="Finish" />
+          )}
         </>
+      )}
+      {status === QuestionsStatus.FINISHED && (
+        <FinishScreen maxPoints={maxPoints} points={points} />
       )}
     </>
   );

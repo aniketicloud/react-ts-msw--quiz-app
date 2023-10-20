@@ -4,7 +4,8 @@ export enum ActionType {
   DATA_FAILED,
   START,
   NEW_ANSWER,
-  NEXT_QUESTION
+  NEXT_QUESTION,
+  FINISH
 }export interface QuestionType {
   correctOption: number;
   id: number;
