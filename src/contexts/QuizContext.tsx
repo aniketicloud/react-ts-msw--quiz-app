@@ -37,7 +37,8 @@ type Action =
     }
   | {
       type: ActionType.NEXT_QUESTION;
-    };
+    }
+  | { type: ActionType.FINISH };
 
 const initialState: State = {
   questions: [],
@@ -83,6 +84,10 @@ const reducer = (state: State, action: Action) => {
     case ActionType.NEXT_QUESTION: {
       return { ...state, index: index + 1, answer: null };
     }
+    case ActionType.FINISH: {
+      console.log("inside FINISH switch");
+      return { ...state, status: QuestionsStatus.FINISHED };
+    }
     default: {
       return { ...state };
     }
@@ -116,6 +121,9 @@ export const QuizContext = () => {
       {status === QuestionsStatus.READY && (
         <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
       )}
+      {status === QuestionsStatus.FINISHED && (
+        <FinishScreen maxPoints={maxPoints} points={points} />
+      )}
       {status === QuestionsStatus.ACTIVE && (
         <>
           <Progress
@@ -130,16 +138,15 @@ export const QuizContext = () => {
             dispatch={dispatch}
             answer={answer}
           />
-          {answer !== null && index < numQuestions - 1 && (
-            <NextButton dispatch={dispatch} label={"Next"} />
-          )}
-          {index === numQuestions - 1 && (
-            <NextButton dispatch={dispatch} label="Finish" />
+          {answer !== null && (
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numQuestions}
+            />
           )}
         </>
-      )}
-      {status === QuestionsStatus.FINISHED && (
-        <FinishScreen maxPoints={maxPoints} points={points} />
       )}
     </>
   );
