@@ -138,13 +138,16 @@ export const QuizContext = () => {
             dispatch={dispatch}
             answer={answer}
           />
-          {answer !== null && (
-            <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-              numQuestions={numQuestions}
-            />
+          {answer !== null && index < numQuestions - 1 && (
+            <NextButton dispatch={dispatch} />
+          )}
+          {answer !== null && index === numQuestions - 1 && (
+            <button
+              className="btn btn-ui"
+              onClick={() => dispatch({ type: ActionType.FINISH })}
+            >
+              Finish
+            </button>
           )}
         </>
       )}
