@@ -10,6 +10,8 @@ import { NextButton } from "../components/NextButton";
 import { Progress } from "../components/Progress";
 import { FinishScreen } from "../components/FinishScreen";
 
+// TODO: Add timer and restart
+
 type State = {
   questions: [] | QuestionType[];
   status: QuestionsStatus;
