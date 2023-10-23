@@ -3,9 +3,14 @@ import { FC } from "react";
 interface FinishScreenProps {
   points: number;
   maxPoints: number;
+  highscore: number;
 }
 
-export const FinishScreen: FC<FinishScreenProps> = ({ maxPoints, points }) => {
+export const FinishScreen: FC<FinishScreenProps> = ({
+  maxPoints,
+  points,
+  highscore,
+}) => {
   const percentage = Math.ceil((points / maxPoints) * 100);
   let emoji;
   if (percentage === 100) emoji = "🥇";
@@ -19,7 +24,7 @@ export const FinishScreen: FC<FinishScreenProps> = ({ maxPoints, points }) => {
         <span>{emoji}</span> You scored <strong>{points}</strong> out of{" "}
         {maxPoints} ({Math.ceil(percentage)}%)
       </p>
-      <p className="highscore">(Highscore: highscore points)</p>
+      <p className="highscore">(Highscore: {highscore} points)</p>
       <button
         className="btn btn-ui"
         // onClick={() => dispatch({ type: "restart" })}

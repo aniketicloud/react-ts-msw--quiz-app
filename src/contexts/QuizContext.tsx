@@ -19,6 +19,7 @@ type State = {
   index: number;
   points: number;
   maxPoints: number;
+  highscore: number;
 };
 
 enum QuestionsStatus {
@@ -33,13 +34,8 @@ type Action =
   | { type: ActionType.DATA_RECEIVED; payload: QuestionType[] }
   | { type: ActionType.DATA_FAILED }
   | { type: ActionType.START }
-  | {
-      type: ActionType.NEW_ANSWER;
-      payload: number;
-    }
-  | {
-      type: ActionType.NEXT_QUESTION;
-    }
+  | { type: ActionType.NEW_ANSWER; payload: number }
+  | { type: ActionType.NEXT_QUESTION }
   | { type: ActionType.FINISH };
 
 const initialState: State = {
@@ -49,11 +45,12 @@ const initialState: State = {
   index: 0,
   points: 0,
   maxPoints: 0,
+  highscore: 0,
 };
 
 const reducer = (state: State, action: Action) => {
   const { type } = action;
-  const { index, questions, points } = state;
+  const { index, questions, points, highscore } = state;
   switch (type) {
     case ActionType.DATA_RECEIVED: {
       const maxPoints = questions.reduce((previousValue, currentValue) => {
@@ -88,7 +85,11 @@ const reducer = (state: State, action: Action) => {
     }
     case ActionType.FINISH: {
       console.log("inside FINISH switch");
-      return { ...state, status: QuestionsStatus.FINISHED };
+      return {
+        ...state,
+        highscore: points > highscore ? points : highscore,
+        status: QuestionsStatus.FINISHED,
+      };
     }
     default: {
       return { ...state };
@@ -97,8 +98,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 export const QuizContext = () => {
-  const [{ questions, status, index, answer, points, maxPoints }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, status, index, answer, points, maxPoints, highscore },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -124,7 +127,11 @@ export const QuizContext = () => {
         <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
       )}
       {status === QuestionsStatus.FINISHED && (
-        <FinishScreen maxPoints={maxPoints} points={points} />
+        <FinishScreen
+          maxPoints={maxPoints}
+          points={points}
+          highscore={highscore}
+        />
       )}
       {status === QuestionsStatus.ACTIVE && (
         <>
