@@ -36,7 +36,8 @@ type Action =
   | { type: ActionType.START }
   | { type: ActionType.NEW_ANSWER; payload: number }
   | { type: ActionType.NEXT_QUESTION }
-  | { type: ActionType.FINISH };
+  | { type: ActionType.FINISH }
+  | { type: ActionType.RESTART };
 
 const initialState: State = {
   questions: [],
@@ -84,12 +85,14 @@ const reducer = (state: State, action: Action) => {
       return { ...state, index: index + 1, answer: null };
     }
     case ActionType.FINISH: {
-      console.log("inside FINISH switch");
       return {
         ...state,
         highscore: points > highscore ? points : highscore,
         status: QuestionsStatus.FINISHED,
       };
+    }
+    case ActionType.RESTART: {
+      return { ...initialState, questions, status: QuestionsStatus.READY };
     }
     default: {
       return { ...state };
@@ -131,6 +134,7 @@ export const QuizContext = () => {
           maxPoints={maxPoints}
           points={points}
           highscore={highscore}
+          dispatch={dispatch}
         />
       )}
       {status === QuestionsStatus.ACTIVE && (

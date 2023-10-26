@@ -1,15 +1,18 @@
-import { FC } from "react";
+import { Dispatch, FC } from "react";
+import { ActionType } from "../types";
 
 interface FinishScreenProps {
   points: number;
   maxPoints: number;
   highscore: number;
+  dispatch: Dispatch<{ type: ActionType.RESTART }>;
 }
 
 export const FinishScreen: FC<FinishScreenProps> = ({
   maxPoints,
   points,
   highscore,
+  dispatch,
 }) => {
   const percentage = Math.ceil((points / maxPoints) * 100);
   let emoji;
@@ -27,7 +30,7 @@ export const FinishScreen: FC<FinishScreenProps> = ({
       <p className="highscore">(Highscore: {highscore} points)</p>
       <button
         className="btn btn-ui"
-        // onClick={() => dispatch({ type: "restart" })}
+        onClick={() => dispatch({ type: ActionType.RESTART })}
       >
         Restart quiz
       </button>
