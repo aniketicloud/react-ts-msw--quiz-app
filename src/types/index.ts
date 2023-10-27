@@ -5,7 +5,8 @@ export enum ActionType {
   NEW_ANSWER,
   NEXT_QUESTION,
   FINISH,
-  RESTART
+  RESTART,
+  TICK,
 }
 export interface QuestionType {
   correctOption: number;
