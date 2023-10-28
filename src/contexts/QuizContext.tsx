@@ -77,6 +77,7 @@ const reducer = (state: State, action: Action) => {
         ...state,
         maxPoints,
         status: QuestionsStatus.ACTIVE,
+        secondsRemaining: SECONDS_PER_QUESTION * questions.length,
       };
     }
     case ActionType.NEW_ANSWER: {
