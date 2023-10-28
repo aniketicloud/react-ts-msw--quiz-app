@@ -8,9 +8,10 @@ interface TimerProps {
 
 export const Timer: FC<TimerProps> = ({ dispatch, secondsRemaining }) => {
   useEffect(() => {
-    setInterval(() => {
+    const timerId = setInterval(() => {
       dispatch({ type: ActionType.TICK });
     }, 1000);
+    return () => clearInterval(timerId);
   }, [dispatch]);
   return <div className="timer">{secondsRemaining}</div>;
 };
