@@ -63,16 +63,19 @@ const reducer = (state: State, action: Action) => {
         ...state,
         questions: action.payload,
         status: QuestionsStatus.READY,
-        maxPoints: questions.reduce((previousValue, currentValue) => {
-          return previousValue + currentValue.points;
-        }, 0),
       };
     }
     case ActionType.DATA_FAILED: {
       return { ...state, status: QuestionsStatus.ERROR };
     }
     case ActionType.START: {
-      return { ...state, status: QuestionsStatus.ACTIVE };
+      return {
+        ...state,
+        status: QuestionsStatus.ACTIVE,
+        maxPoints: questions.reduce((previousValue, currentValue) => {
+          return previousValue + currentValue.points;
+        }, 0),
+      };
     }
     case ActionType.NEW_ANSWER: {
       const currentQuestion = questions.at(index);
