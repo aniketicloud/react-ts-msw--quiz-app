@@ -9,7 +9,6 @@ interface QuestionProps {
 }
 
 export const Question: FC<QuestionProps> = ({ question, dispatch, answer }) => {
-  console.log("question:", question);
   return (
     <>
       <h4>{question.question}</h4>
