@@ -5,14 +5,15 @@ import { Options } from "./Options";
 interface QuestionProps {
   dispatch: Dispatch<{ type: ActionType.NEW_ANSWER; payload: number }>;
   question: QuestionType;
-  answer: null| number
+  answer: null | number;
 }
 
 export const Question: FC<QuestionProps> = ({ question, dispatch, answer }) => {
+  console.log("question:", question);
   return (
     <>
       <h4>{question.question}</h4>
-      <Options question={question} dispatch={dispatch} answer={answer}/>
+      <Options question={question} dispatch={dispatch} answer={answer} />
     </>
   );
 };
