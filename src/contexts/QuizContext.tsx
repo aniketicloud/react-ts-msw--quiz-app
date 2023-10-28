@@ -59,14 +59,13 @@ const reducer = (state: State, action: Action) => {
   const { index, questions, points, highscore, secondsRemaining } = state;
   switch (type) {
     case ActionType.DATA_RECEIVED: {
-      const maxPoints = questions.reduce((previousValue, currentValue) => {
-        return previousValue + currentValue.points;
-      }, 0);
       return {
         ...state,
         questions: action.payload,
         status: QuestionsStatus.READY,
-        maxPoints,
+        maxPoints: questions.reduce((previousValue, currentValue) => {
+          return previousValue + currentValue.points;
+        }, 0),
       };
     }
     case ActionType.DATA_FAILED: {
