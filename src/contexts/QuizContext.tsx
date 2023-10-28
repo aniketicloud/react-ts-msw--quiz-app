@@ -13,6 +13,7 @@ import { Footer } from "../components/Footer";
 import { Timer } from "../components/Timer";
 
 // TODO: Add timer and restart
+const SECONDS_PER_QUESTION = 30;
 
 type State = {
   questions: [] | QuestionType[];
@@ -69,12 +70,13 @@ const reducer = (state: State, action: Action) => {
       return { ...state, status: QuestionsStatus.ERROR };
     }
     case ActionType.START: {
+      const maxPoints = questions.reduce((previousValue, currentValue) => {
+        return previousValue + currentValue.points;
+      }, 0);
       return {
         ...state,
+        maxPoints,
         status: QuestionsStatus.ACTIVE,
-        maxPoints: questions.reduce((previousValue, currentValue) => {
-          return previousValue + currentValue.points;
-        }, 0),
       };
     }
     case ActionType.NEW_ANSWER: {
